@@ -587,9 +587,9 @@ function restartGame() {
   sprites[1].lastPlayerPos = { x: 15, y: 20 };
   
   sprites[2].x = 40;
-  sprites[2].y = 30;
+  sprites[2].y = 35;
   sprites[2].hasLineOfSight = false;
-  sprites[2].lastPlayerPos = { x: 40, y: 30 };
+  sprites[2].lastPlayerPos = { x: 40, y: 35 };
 }
 
 function update() {
