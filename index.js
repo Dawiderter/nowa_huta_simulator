@@ -1,3 +1,4 @@
+import map from "./map.js";
 function findLineSegmentIntersection(p1, p2, p3, p4) {
   // Odcinek 1: od p1 do p2
   // Odcinek 2: od p3 do p4
@@ -50,10 +51,10 @@ let textureBuffer = new ImageData(1,1);
 const textureImage = new Image();
 textureImage.src = "t_map.png";
 
-const tileWidth = 16;
-const tileHeight = 16;
+const tileWidth = 8;
+const tileHeight = 8;
 
-const wallScale = 2;
+const wallScale = 4;
 
 textureImage.onload = function () {
     textureCanvas.width = textureImage.width;
@@ -81,33 +82,13 @@ function drawPixel(buffer, x, y, r, g, b) {
     buffer.data[i + 3] = 255;
 }
 
-// Map (1 = wall, 0 = empty)
-const map = [
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1],
-    [1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 1],
-    [1, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-    [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-];
-
 // Player
 const player = {
-    x: 2.5,
-    y: 2.5,
-    angle: 0,
+    x: 21 * wallScale,
+    y: 53 * wallScale,
+    angle: Math.PI / 2,
     fov: Math.PI / 3,
-    speed: 0.02,
+    speed: 0.03 * wallScale,
     rotSpeed: 0.015,
 };
 
@@ -132,12 +113,12 @@ function castRay(angle) {
     const dy = Math.sin(angle);
 
     let t = 0;
-    const step = 0.01;
+    const step = 0.01 * wallScale;
 
     const rox = player.x / wallScale;
     const roy = player.y / wallScale;
 
-    while (t < 20) {
+    while (t < 20 * wallScale) {
         const x = rox + dx * t;
         const y = roy + dy * t;
 
@@ -185,7 +166,6 @@ function drawWall(x, dist, height, wallType, side) {
     height = Math.round(height);
     height = height + height % 2;
 
-    const color = wallColors[wallType];
     const darken = 1 / (1 + dist*dist);
 
     const t_x = Math.floor(side * tileWidth); 
